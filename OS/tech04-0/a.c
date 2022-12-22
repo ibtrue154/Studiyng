@@ -7,8 +7,7 @@
 int main()
 {
     long long int size_summ = 0;
-    char str_buffer[PATH_MAX];
-    memset(str_buffer, 0, sizeof(char) * PATH_MAX);
+    char *str_buffer = malloc(sizeof(char) * PATH_MAX);
 
     struct stat f_stat;
     while (fgets(str_buffer, PATH_MAX, stdin) != NULL)
@@ -23,6 +22,8 @@ int main()
     		}
     	}
     }
+
+    free(str_buffer);
 
     printf("%lld\n", size_summ);
     return 0;

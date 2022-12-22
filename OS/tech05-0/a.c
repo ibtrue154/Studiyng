@@ -1,10 +1,12 @@
+#include <sys/types.h>
 #include <sys/mman.h>
 #include <fcntl.h>
-#include <stdlib.h>
 #include <sys/stat.h>
 #include <unistd.h>
 #include <string.h>
 #include <stdio.h>
+
+void *memmem(const void *haystack, size_t haystacklen, const void *needle, size_t needlelen);
 
 int main(int argc, char *argv[]) 
 {
@@ -19,9 +21,11 @@ int main(int argc, char *argv[])
         return 0;
 	char *contents = mmap(NULL, st.st_size, PROT_READ, MAP_SHARED, fd, 0);
 	char *entry = contents;
-	while (NULL != (entry = strstr(entry, pattern))) 
+	size_t len = st.st_size;
+    while (NULL != (entry = memmem(entry, len, pattern, strlen(pattern)))) 
     {
-		size_t diff = entry - contents;
+        size_t diff = entry - contents;
+        len = st.st_size - diff - 1;
 		printf("%lu ", diff);
 		entry++;
 	}
